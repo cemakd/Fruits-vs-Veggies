@@ -63,7 +63,7 @@ exports.handler = (event, context) => {
             if (session.attributes.plantIndex != -1) {
               var plantIndex = session.attributes.plantIndex;
               session.attributes.plantIndex = -1;
-              if (plantList[plantIndex].type == "fruit") {
+              if (plantList[plantIndex].type == "vegetable") {
                 buildResponseWithSessionAttribute(context, "Yay!, You are right!" + 
                   plantList[plantIndex].name + " is a vegetable! Do you want another question?", 
                   false, {"plantIndex" : -1});
@@ -162,6 +162,7 @@ buildResponseWithSessionAttribute = (context, output, shouldEndSession, sessionA
     )
   );
 }
+
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
