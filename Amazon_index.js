@@ -11,8 +11,8 @@ exports.handler = (event, context) => {
     
     if (event.session.new) {
       // New Session
-      console.log("NEW SESSION")
-      session.attributes.plantIndex = -1;
+      console.log("NEW SESSION");
+      session.attributes = {"plantIndex" : plantIndex};
     }
 
     switch (event.request.type) {
@@ -45,7 +45,7 @@ exports.handler = (event, context) => {
                 buildResponse(context, "Yay!, You are right!" + plantList[plantIndex].name + " is a fruit! Do you want another question?", false);
               }
               else {
-                buildResponse(context, "Oh no!" + plantList[plantIndex].name + " is actually a vedgetable. Would you like another question?", false);
+                buildResponse(context, "Oh no!" + plantList[plantIndex].name + " is actually a vegetable. Would you like another question?", false);
               }
             }
             break;
@@ -54,7 +54,7 @@ exports.handler = (event, context) => {
               var plantIndex = session.attributes.plantIndex;
               session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "fruit") {
-                buildResponse(context, "Yay!, You are right!" + plantList[plantIndex].name + " is a vedgetable! Do you want another question?", false);
+                buildResponse(context, "Yay!, You are right!" + plantList[plantIndex].name + " is a vegetable! Do you want another question?", false);
               }
               else {
                 buildResponse(context, "Oh no!" + plantList[plantIndex].name + " is actually a fruit. Would you like another question?", false);
