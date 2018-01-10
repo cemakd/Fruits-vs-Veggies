@@ -1,0 +1,47 @@
+{
+  "languageModel": {
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": [
+          "cancel"
+        ]
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": [
+          "help me",
+          "help"
+        ]
+      },
+      {
+        "name": "AMAZON.NoIntent",
+        "samples": [
+          "no",
+          "nope",
+          "negative"
+        ]
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": [
+          "stop"
+        ]
+      },
+      {
+        "name": "AMAZON.YesIntent",
+        "samples": [
+          "yes",
+          "start",
+          "play",
+          "yea",
+          "sure",
+          "next",
+          "continue",
+          "go"
+        ]
+      }
+    ],
+    "invocationName": "fruits versus veggies"
+  }
+}
