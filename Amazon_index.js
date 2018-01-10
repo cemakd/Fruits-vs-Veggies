@@ -12,7 +12,7 @@ exports.handler = (event, context) => {
     if (event.session.new) {
       // New Session
       console.log("NEW SESSION");
-      session.attributes = {"plantIndex" : plantIndex};
+      session.attributes = {"plantIndex" : -1};
     }
 
     switch (event.request.type) {
@@ -22,7 +22,8 @@ exports.handler = (event, context) => {
         console.log(`LAUNCH REQUEST`);
         context.succeed(
           generateResponse(
-            buildSpeechletResponse("Welcome to fruits versus veggies! Ready to test your knowledge?", false)
+            buildSpeechletResponse("Welcome to fruits versus veggies! Ready to test your knowledge?", 
+              false)
           )
         );
         break;
@@ -32,20 +33,29 @@ exports.handler = (event, context) => {
         console.log("YES INTENT REQUEST");
         switch(event.request.intent.name) {
           case "AMAZON.YesIntent":
+            if (session.attributes == undefined) {
+              session.attributes = {"plantIndex" : -1};
+            }
             if (session.attributes.plantIndex == -1) {
               var totalOptions = plantList.length;
               var plantIndex = getRandomInt(0, plantList.length);
               session.attributes = {"plantIndex" : plantIndex};
-              buildResponse(context, "Is a " + plantList[plantIndex].name + " a fruit?", false);
+              buildResponseWithSessionAttribute(context, 
+                "Is a " + plantList[plantIndex].name + " a fruit?", 
+                false, {"plantIndex" : plantIndex});
             }
             else {
               var plantIndex = session.attributes.plantIndex;
-              session.attributes.plantIndex = -1;
+              // session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "fruit") {
-                buildResponse(context, "Yay!, You are right!" + plantList[plantIndex].name + " is a fruit! Do you want another question?", false);
+                buildResponseWithSessionAttribute(context, "Yay!, You are right!" + 
+                  plantList[plantIndex].name + " is a fruit! Do you want another question?", 
+                  false, {"plantIndex" : -1});
               }
               else {
-                buildResponse(context, "Oh no!" + plantList[plantIndex].name + " is actually a vegetable. Would you like another question?", false);
+                buildResponseWithSessionAttribute(context, "Oh no!" + 
+                  plantList[plantIndex].name + " is actually a vegetable. Would you like another question?", 
+                  false, {"plantIndex" : -1});
               }
             }
             break;
@@ -54,10 +64,14 @@ exports.handler = (event, context) => {
               var plantIndex = session.attributes.plantIndex;
               session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "fruit") {
-                buildResponse(context, "Yay!, You are right!" + plantList[plantIndex].name + " is a vegetable! Do you want another question?", false);
+                buildResponseWithSessionAttribute(context, "Yay!, You are right!" + 
+                  plantList[plantIndex].name + " is a vegetable! Do you want another question?", 
+                  false, {"plantIndex" : -1});
               }
               else {
-                buildResponse(context, "Oh no!" + plantList[plantIndex].name + " is actually a fruit. Would you like another question?", false);
+                buildResponseWithSessionAttribute(context, "Oh no!" + 
+                  plantList[plantIndex].name + " is actually a fruit. Would you like another question?", 
+                  false, {"plantIndex" : -1});
               }
             }
             else {
@@ -140,11 +154,11 @@ buildResponse = (context, output, shouldEndSession) => {
   );
 }
 
-buildResponseWithSessionAttribute = (context, output, shouldEndSession, session, sessionAttributes) => {
-  
+buildResponseWithSessionAttribute = (context, output, shouldEndSession, sessionAttributes) => {
   context.succeed(
     generateResponse(
-      buildSpeechletResponse(output, shouldEndSession)
+      buildSpeechletResponse(output, shouldEndSession),
+      sessionAttributes
     )
   );
 }
