@@ -101,6 +101,47 @@ exports.handler = (event, context) => {
       {"name" : "pepper", "type" : "fruit" },
       {"name" : "pumpkin", "type" : "fruit" }
     ];
+
+    var successAnswers = [
+      "Good job!",
+      "Yes!",
+      "Yeah!",
+      "Hooray!",
+      "Nice one!",
+      "You're right!",
+      "Wohoo!",
+      "You're smart!",
+      "I'm proud of you!"
+    ];
+
+    var failureAnswers = [
+      "Oh no!",
+      "Uh-oh",
+      "You're wrong!",
+      "Too bad!",
+      "Nope!",
+      "Not quite right.",
+      "Sorry!"
+    ];
+
+    var questionPrompts = [
+      "Would you like another question?",
+      "Another one?",
+      "Next?",
+      "Keep going?",
+      "Would you like more?",
+      "Do you want another question?"
+    ];
+
+    var exitResponses = [
+      "Launch me again when you are ready!",
+      "Thanks for playing!",
+      "Thanks! If you enjoyed playing please rate me in the Alexa app.",
+      "See you next time!",
+      "Hope to see you again soon!",
+      "Alright, I wish you had fun!"
+    ];
+
     var plantIndex = 0;
     
     if (event.session.new) {
@@ -140,15 +181,15 @@ exports.handler = (event, context) => {
             }
             else {
               var plantIndex = session.attributes.plantIndex;
-              // session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "fruit") {
-                buildResponseWithSessionAttribute(context, "Yay!, You are right!" + 
-                  plantList[plantIndex].name + " is a fruit! Do you want another question?", 
+
+                buildResponseWithSessionAttribute(context, successAnswers[getRandomInt(0, successAnswers.length)] + 
+                  plantList[plantIndex].name + " is a fruit! " + questionPrompts[getRandomInt(0, questionPrompts.length)], 
                   false, {"plantIndex" : -1});
               }
               else {
-                buildResponseWithSessionAttribute(context, "Oh no!" + 
-                  plantList[plantIndex].name + " is actually a vegetable. Would you like another question?", 
+                buildResponseWithSessionAttribute(context, failureAnswers[getRandomInt(0, failureAnswers.length)] + 
+                  plantList[plantIndex].name + " is actually a vegetable. " + questionPrompts[getRandomInt(0, questionPrompts.length)], 
                   false, {"plantIndex" : -1});
               }
             }
@@ -158,25 +199,17 @@ exports.handler = (event, context) => {
               var plantIndex = session.attributes.plantIndex;
               session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "vegetable") {
-                buildResponseWithSessionAttribute(context, "Yay!, You are right!" + 
-                  plantList[plantIndex].name + " is a vegetable! Do you want another question?", 
+                buildResponseWithSessionAttribute(context, successAnswers[getRandomInt(0, successAnswers.length)] + 
+                  plantList[plantIndex].name + " is a vegetable! " + questionPrompts[getRandomInt(0, questionPrompts.length)], 
                   false, {"plantIndex" : -1});
               }
               else {
-                buildResponseWithSessionAttribute(context, "Oh no!" + 
-                  plantList[plantIndex].name + " is actually a fruit. Would you like another question?", 
+                buildResponseWithSessionAttribute(context, failureAnswers[getRandomInt(0, failureAnswers.length)] + 
+                  plantList[plantIndex].name + " is actually a fruit. " + questionPrompts[getRandomInt(0, questionPrompts.length)], 
                   false, {"plantIndex" : -1});
               }
             }
             else {
-              var exitResponses = [
-                "Launch me again when you are ready!",
-                "Thanks for playing!",
-                "Thanks! If you enjoyed playing please rate me in the Alexa app.",
-                "See you next time!",
-                "Hope to see you again soon!",
-                "Alright, I wish you had fun!"
-              ];
               var randomNum = getRandomInt(0, exitResponses.length);
               buildResponse(context, exitResponses[randomNum], true);
             }
