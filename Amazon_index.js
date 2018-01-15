@@ -195,7 +195,11 @@ exports.handler = (event, context) => {
             }
             break;
           case "AMAZON.NoIntent":
-            if (session.attributes.plantIndex != -1) {
+            if(session.attributes == undefined){
+              var randomNum = getRandomInt(0, exitResponses.length);
+              buildResponse(context, exitResponses[randomNum], true);
+            }
+            else if (session.attributes.plantIndex != -1) {
               var plantIndex = session.attributes.plantIndex;
               session.attributes.plantIndex = -1;
               if (plantList[plantIndex].type == "vegetable") {
